@@ -41,7 +41,7 @@ android = int(sys.argv[7]) if len(sys.argv) > 6 else 0
 if minimum != 0:
     blacklist.append('linalg.h')
 
-if platform.system() != 'Darwin':
+if platform.system() != 'Darwin' or minimum != 0: # semyonc
     blacklist.append('TargetConditionals.h')
 
 if platform.system() != 'Windows':

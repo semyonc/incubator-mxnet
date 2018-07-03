@@ -87,6 +87,7 @@ class IdentityAttachKLSparseRegOp : public Operator {
     Assign(out, req[sparsereg::kData], F<mshadow_op::identity>(data));
   }
 
+  #if (MXNET_PREDICT_ONLY == 0) /* semyonc 09.11.2017 */
   virtual void Backward(const OpContext &ctx,
                         const std::vector<TBlob> &out_grad,
                         const std::vector<TBlob> &in_data,
@@ -110,6 +111,7 @@ class IdentityAttachKLSparseRegOp : public Operator {
       (-param_.sparseness_target / broadcast<1>(moving_avg, data_in.shape_) +
       ((1 - param_.sparseness_target) / (1 - broadcast<1>(moving_avg, data_in.shape_)))));
   }
+#endif
 
  private:
   IdentityAttachKLSparseRegParam param_;

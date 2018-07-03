@@ -89,6 +89,7 @@ class MakeLossOp : public Operator {
     }
   }
 
+#if (MXNET_PREDICT_ONLY == 0) /* semyonc 09.11.2017 */
   virtual void Backward(const OpContext &ctx,
                         const std::vector<TBlob> &out_grad,
                         const std::vector<TBlob> &in_data,
@@ -117,6 +118,7 @@ class MakeLossOp : public Operator {
       Assign(grad, req[make_loss_enum::kData], ScalarExp<DType>(param_.grad_scale));
     }
   }
+#endif
 
  private:
   MakeLossParam param_;

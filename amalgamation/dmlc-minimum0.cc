@@ -31,4 +31,5 @@
 #include "../3rdparty/dmlc-core/src/io.cc"
 #include "../3rdparty/dmlc-core/src/recordio.cc"
 
-
+// semyonc
+#include "../3rdparty/dmlc-core/src/io/filesys.cc"

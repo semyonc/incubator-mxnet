@@ -43,6 +43,7 @@
 #define DISABLE_OPENMP 1
 #define DMLC_LOG_STACK_TRACE 0
 
+#include "src/common/utils.cc"
 
 #include "src/ndarray/ndarray_function.cc"
 #include "src/ndarray/ndarray.cc"
@@ -53,7 +54,12 @@
 #include "src/engine/engine.cc"
 #include "src/engine/naive_engine.cc"
 
+// semyonc: v1.1.0 port
+#include "src/engine/openmp.cc"
+#include "src/executor/infer_graph_attr_pass.cc"
+
 #include "src/profiler/profiler.cc"
+#include "src/profiler/aggregate_stats.cc"
 
 #include "src/executor/graph_executor.cc"
 #include "src/executor/attach_op_execs_pass.cc"
@@ -64,6 +70,7 @@
 #include "src/nnvm/legacy_op_util.cc"
 
 #include "src/operator/operator.cc"
+#include "src/operator/custom/custom.cc"
 #include "src/operator/operator_util.cc"
 #include "src/operator/nn/activation.cc"
 #include "src/operator/nn/batch_norm.cc"
@@ -84,6 +91,21 @@
 #include "src/operator/tensor/elemwise_unary_op_trig.cc"
 #include "src/operator/tensor/matrix_op.cc"
 
+// Additional operators
+#include "src/operator/tensor/init_op.cc"
+#include "src/operator/tensor/indexing_op.cc"
+#include "src/operator/tensor/broadcast_reduce_op_index.cc"
+#include "src/operator/tensor/broadcast_reduce_op_value.cc"
+#include "src/operator/tensor/dot.cc"
+// #include "src/operator/tensor/elemwise_binary_scalar_op_extended.cc"
+#include "src/operator/random/sample_op.cc"
+#include "src/operator/slice_channel.cc"
+#include "src/operator/crop.cc"
+#include "src/operator/make_loss.cc"
+#include "src/operator/swapaxis.cc"
+#include "src/operator/nn/softmax.cc"
+//#include "src/operator/nn/lrn.cc"
+
 #include "src/storage/storage.cc"
 
 #include "src/resource.cc"
@@ -94,3 +116,6 @@
 #include "src/c_api/c_api_ndarray.cc"
 #include "src/c_api/c_api_error.cc"
 
+// semyonc: v1.2
+#include "src/c_api/c_api_function.cc"
+#include "src/c_api/c_api_profile.cc"

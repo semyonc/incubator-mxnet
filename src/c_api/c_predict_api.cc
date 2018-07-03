@@ -110,18 +110,20 @@ int MXPredCreatePartialOut(const char* symbol_json_str,
   MXAPIPredictor* ret = new MXAPIPredictor();
   API_BEGIN();
   Symbol sym;
-  // make sure symbols are registered
+  // make sure symbols are registered  
   {
   mx_uint outSize;
   const char **outArray;
   MXListAllOpNames(&outSize, &outArray);
   }
+  
   // load in the symbol.
   {
     nnvm::Graph g;
     g.attrs["json"] = std::make_shared<nnvm::any>(std::string(symbol_json_str));
     sym.outputs = nnvm::ApplyPass(g, "LoadLegacyJSON").outputs;
-  }
+  } 
+  
   // looks likely to output the internal results
   if (num_output_nodes != 0) {
     Symbol internal = sym.GetInternals();
@@ -140,7 +142,7 @@ int MXPredCreatePartialOut(const char* symbol_json_str,
     }
     sym = nnvm::Symbol::CreateGroup(out_syms);
   }
-
+  
   // load the parameters
   std::unordered_map<std::string, NDArray> arg_params, aux_params;
   {
@@ -174,7 +176,7 @@ int MXPredCreatePartialOut(const char* symbol_json_str,
       }
     }
   }
-
+   
   // shape inference and bind
   std::unordered_map<std::string, TShape> known_shape;
   for (mx_uint i = 0; i < num_input_nodes; ++i) {
@@ -191,7 +193,7 @@ int MXPredCreatePartialOut(const char* symbol_json_str,
     std::string key = arg_names[i];
     ret->key2arg[key] = i;
   }
-
+  
   try {
     std::vector<TShape> in_shapes;
     for (std::string key : sym.ListInputNames(Symbol::kAll)) {
@@ -231,6 +233,7 @@ int MXPredCreatePartialOut(const char* symbol_json_str,
     aux_arrays.push_back(nd);
   }
   ret->arg_arrays = arg_arrays;
+  
   // bind
   {
     std::map<std::string, Context> ctx_map;
@@ -246,6 +249,7 @@ int MXPredCreatePartialOut(const char* symbol_json_str,
     ret->out_arrays = ret->exec->outputs();
   }
   *out = ret;
+  
   API_END_HANDLE_ERROR(delete ret);
 }
 

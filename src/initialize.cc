@@ -25,7 +25,10 @@
 #include <signal.h>
 #include <dmlc/logging.h>
 #include <mxnet/engine.h>
+
+#if !DISABLE_OPENMP // semyonc
 #include "./engine/openmp.h"
+#endif
 
 namespace mxnet {
 #if MXNET_USE_SIGNAL_HANDLER && DMLC_LOG_STACK_TRACE
@@ -45,7 +48,8 @@ class LibraryInitializer {
 #endif
 
 // disable openmp for multithreaded workers
-#ifndef _WIN32
+#if !DISABLE_OPENMP // semyonc: 7/2/2018
+#ifndef _WIN32 
     pthread_atfork(
       []() {
         Engine::Get()->Stop();
@@ -60,6 +64,7 @@ class LibraryInitializer {
         engine::OpenMP::Get()->set_enabled(false);
         Engine::Get()->Start();
       });
+#endif
 #endif
   }
 
